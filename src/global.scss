@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "styles/_font";
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  font-family: "Bebas Neue";
+  overflow: hidden;
+}
