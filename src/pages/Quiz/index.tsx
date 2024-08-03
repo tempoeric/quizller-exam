@@ -107,6 +107,20 @@ export const QuizPage: FC<QuizPageProps> = ({ onFinishQuiz }) => {
   };
 
   useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+      window.location.href = "/";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
     axios
       .get(`https://quizapi.io/api/v1/questions`, {
         params: {
@@ -140,35 +154,35 @@ export const QuizPage: FC<QuizPageProps> = ({ onFinishQuiz }) => {
 
   if (quizFinished) {
     return (
-      <>
-        <div className="relative flex bg-blue-primary min-h-screen items-center">
-          <QuizBackgroundDark className="absolute w-full -left-80" />
-          <div className="flex-auto relative items-center text-white font-bebas">
-            <div className="flex flex-col items-center justify-center flex-grow">
-              <p className="text-[20rem] leading-[17rem] text-center">BRAVO!</p>
-              <p className="text-[8rem] m-0 leading-none text-center mb-16">
-                YOU HAVE SCORED
-              </p>
-            </div>
-            <div className="absolute right-[15rem] bottom-0">
-              <button
-                className="font-sora text-2xl text-white py-2 px-4 rounded-full underline"
-                onClick={handleRestartQuiz}
-              >
-                Wanna Play Again?
-              </button>
-            </div>
+      <div className="relative flex bg-blue-primary min-h-screen items-center">
+        <QuizBackgroundDark className="absolute w-full sm:-left-40 -left-80" />
+        <div className="flex-auto relative items-center text-white font-bebas">
+          <div className="flex flex-col items-center justify-center flex-grow">
+            <p className="text-[6rem] md:text-[10rem] lg:text-[20rem] leading-tight text-center">
+              BRAVO!
+            </p>
+            <p className="text-[3rem] md:text-[5rem] lg:text-[8rem] m-0 leading-none text-center mb-8 md:mb-16">
+              YOU HAVE SCORED
+            </p>
           </div>
-
-          <div className="relative flex flex-grow">
-            <div className="fixed top-0 w-[35rem] h-screen bg-gray-200 right-28 flex items-center justify-center">
-              <p className="text-[15rem] text-blue-primary">
-                {score}/{totalQuestions}
-              </p>
-            </div>
+          <div className="absolute right-8 bottom-8 md:right-[15rem] md:bottom-0">
+            <button
+              className="font-sora text-xl md:text-2xl text-white py-2 px-4 rounded-full underline"
+              onClick={handleRestartQuiz}
+            >
+              Wanna Play Again?
+            </button>
           </div>
         </div>
-      </>
+
+        <div className="relative flex flex-grow">
+          <div className="fixed top-0 w-full sm:w-[20rem] md:w-[25rem] lg:w-[35rem] h-screen bg-gray-200 right-0 md:right-28 flex items-center justify-center">
+            <p className="text-[5rem] sm:text-[10rem] md:text-[15rem] text-blue-primary">
+              {score}/{totalQuestions}
+            </p>
+          </div>
+        </div>
+      </div>
     );
   }
 
